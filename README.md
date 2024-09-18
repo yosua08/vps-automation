@@ -1,1 +1,1 @@
-# vps-automation
+# VPS Automation
