@@ -4,12 +4,12 @@ import os
 
 print("Starting job to run nessus")
 
-file_name = 'run_nessus.py'
+# file_name = 'run_nessus.py'
 
-# Add permision to execute file
-print("[1] Success add permission ")
-exec_permision = f'chmod +x {file_name}'
-os.system(exec_permision)
+# # Add permision to execute file
+# print("[1] Success add permission ")
+# exec_permision = f'chmod +x {file_name}'
+# os.system(exec_permision)
 
 # Setting firewall to allow port 8834
 print("[2] Success allow port 8834")
