@@ -36,7 +36,7 @@ def main():
     if args.command == 'start':
         start()
     elif args.command == 'stop':
-        stop
+        stop()
 
 if __name__ == '__main__':
     main()
