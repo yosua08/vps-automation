@@ -14,7 +14,7 @@ def start():
     os.system(allow_fw)
 
     # Check status firewall
-    print("[2] Success check status firewall")
+    print("[2] Success check firewall status")
     fw_status = f'sudo ufw status'
     os.system(fw_status)
 
@@ -25,7 +25,7 @@ def start():
 
     # Check nessus status
     print("[4] Success check nessus status")
-    nessus_status = f'systemctl status nessusd'
+    nessus_status = f'sudo systemctl status nessusd'
     os.system(nessus_status)
 
 def stop():
@@ -37,7 +37,7 @@ def stop():
     os.system(allow_fw)
 
     # Check status firewall
-    print("[2] Success check status firewall")
+    print("[2] Success check firewall status")
     fw_status = f'sudo ufw status'
     os.system(fw_status)
 
@@ -48,7 +48,7 @@ def stop():
 
     # Check nessus status
     print("[4] Success check nessus status")
-    nessus_status = f'systemctl status nessusd'
+    nessus_status = f'sudo systemctl status nessusd'
     os.system(nessus_status)
 
 def main():

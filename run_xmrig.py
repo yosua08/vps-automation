@@ -12,5 +12,5 @@ os.chdir(ch_dir)
 # Create screen session & start xmrig
 print("[2] Success create screen session")
 run_xmrig = f'screen -S mining\
-                   ./xmrig -o rx.unmineable.com:3333 -a rx -k -u DOGE:D7MrSwFABXmGze7oVLVTaASZNSdLDh4J1t.HiitsMe -p x pause'
+                   ./xmrig -o rx.unmineable.com:3333 -a rx -k -u DOGE:D7MrSwFABXmGze7oVLVTaASZNSdLDh4J1t.HiitsMe -p x'
 os.system(run_xmrig)
