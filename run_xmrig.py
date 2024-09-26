@@ -20,7 +20,9 @@ def stop():
     # Stop process and exit from tmux session
     print("[1] Success kill tmux session")
     stop_process = f"sudo tmux kill-session -t mining"
+    active_sessions = f"sudo tmux active-sessions"
     os.system(stop_process)
+    os.system(active_sessions)
 
 def sessions():
     # Check active sessions
