@@ -9,7 +9,9 @@ def start():
     # Create tmux session
     print("[1] Success create tmux session")
     create_session = f'sudo tmux new-session -d -s mining'
+    active_sessions = f"sudo tmux active-sessions"
     os.system(create_session)
+    os.system(active_sessions)
 
     # Start xmrig
     print("[2] Success run xmrig")
