@@ -22,13 +22,19 @@ def stop():
     stop_process = f"sudo tmux kill-session -t mining"
     os.system(stop_process)
 
+def sessions():
+    # Check active sessions
+    print("Success check active sessions")
+    active_sessions = f"sudo tmux active-sessions"
+    os.system(active_sessions)
+
 def main():
     parser = argparse.ArgumentParser(description="Control the process with start and stop options.")
 
     parser.add_argument(
         'command',
-        choices=['start', 'stop'],
-        help="Choose what action to perform: start, stop."
+        choices=['start', 'stop', 'check-sessions'],
+        help="Choose what action to perform: start, stop and check-session."
     )
 
     args = parser.parse_args()
@@ -37,6 +43,8 @@ def main():
         start()
     elif args.command == 'stop':
         stop()
+    elif args.command == 'check-sessions':
+        sessions()
 
 if __name__ == '__main__':
     main()
