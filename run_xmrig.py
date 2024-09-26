@@ -9,7 +9,7 @@ def start():
     # Create tmux session
     print("[1] Success create tmux session")
     create_session = f'sudo tmux new-session -d -s mining'
-    active_sessions = f"sudo tmux active-sessions"
+    active_sessions = f"sudo tmux list-sessions"
     os.system(create_session)
     os.system(active_sessions)
 
@@ -22,14 +22,14 @@ def stop():
     # Stop process and exit from tmux session
     print("[1] Success kill tmux session")
     stop_process = f"sudo tmux kill-session -t mining"
-    active_sessions = f"sudo tmux active-sessions"
+    active_sessions = f"sudo tmux list-sessions"
     os.system(stop_process)
     os.system(active_sessions)
 
 def sessions():
     # Check active sessions
     print("Success check active sessions")
-    active_sessions = f"sudo tmux active-sessions"
+    active_sessions = f"sudo tmux list-sessions"
     os.system(active_sessions)
 
 def main():
