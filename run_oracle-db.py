@@ -35,7 +35,7 @@ def main():
 
     parser.add_argument(
         'command',
-        choices=['start', 'stop', 'check-sessions'],
+        choices=['start', 'stop'],
         help="Choose what action to perform: start, stop and check-session."
     )
 
