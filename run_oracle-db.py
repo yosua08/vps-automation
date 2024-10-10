@@ -15,7 +15,7 @@ def run():
     print("[2] Success run oracle db on port 1521")
     run_command = f'sudo docker run -d --name oracle-xe \
                     -p 1521:1521 -p 5500:5500 \
-                    -e ORACLE_PWD=G@ring123 \
+                    -e ORACLE_PWD=Oracle123 \
                     container-registry.oracle.com/database/express:latest'
     os.system(run_command)
 
