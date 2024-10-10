@@ -19,6 +19,11 @@ def run():
                     container-registry.oracle.com/database/express:latest'
     os.system(run_command)
 
+    # Check docker running images
+    print("[3] Success check docker running images")
+    check_images = f'sudo docker ps'
+    os.system(check_images)
+
 def start():
     # Allow port 1521
     print("[1] Success allow port 1521")
