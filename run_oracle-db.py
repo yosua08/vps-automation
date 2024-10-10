@@ -42,13 +42,18 @@ def stop():
     os.system(deny_fw)
 
 def remove():
+    # Stop oracle db
+    print("[1] Success kill oracle db process")
+    stop_command = f'sudo docker kill oracle-xe'
+    os.system(stop_command)
+
     # Remove existing container 
-    print("[1] Success remove existing oracle db process")
+    print("[2] Success remove existing oracle db process")
     stop_command = f'sudo docker rm oracle-xe'
     os.system(stop_command)
 
     # Close port 1521
-    print("[2] Success close port 1521")
+    print("[3] Success close port 1521")
     deny_fw = f'sudo ufw deny 1521'
     os.system(deny_fw)
 
