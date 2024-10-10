@@ -30,30 +30,45 @@ def start():
     start_command = f'sudo docker start oracle-xe'
     os.system(start_command)
 
+    # Check docker running images
+    print("[3] Success check docker running images")
+    check_images = f'sudo docker ps'
+    os.system(check_images)
+
 def stop():
     # Stop oracle db
     print("[1] Success kill oracle db process")
     stop_command = f'sudo docker kill oracle-xe'
     os.system(stop_command)
 
+    # Check docker running images
+    print("[2] Success check docker running images")
+    check_images = f'sudo docker ps'
+    os.system(check_images)
+
     # Close port 1521
-    print("[2] Success close port 1521")
+    print("[3] Success close port 1521")
     deny_fw = f'sudo ufw deny 1521'
     os.system(deny_fw)
 
 def remove():
+    # Check docker running images
+    print("[1] Success check docker running images")
+    check_images = f'sudo docker ps'
+    os.system(check_images)
+    
     # Stop oracle db
-    print("[1] Success kill oracle db process")
+    print("[2] Success kill oracle db process")
     stop_command = f'sudo docker kill oracle-xe'
     os.system(stop_command)
 
     # Remove existing container 
-    print("[2] Success remove existing oracle db process")
+    print("[3] Success remove existing oracle db process")
     stop_command = f'sudo docker rm oracle-xe'
     os.system(stop_command)
 
     # Close port 1521
-    print("[3] Success close port 1521")
+    print("[4] Success close port 1521")
     deny_fw = f'sudo ufw deny 1521'
     os.system(deny_fw)
 
