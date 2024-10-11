@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage ('Test') {
             steps {
-                sudo ufw status
+                sh 'sudo ufw status'
             }
         }
     }
