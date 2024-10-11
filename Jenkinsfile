@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage ('Test') {
             steps {
-                echo 'Hello world...!' 
+                sudo ufw status
             }
         }
     }
