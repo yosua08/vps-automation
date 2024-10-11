@@ -5,7 +5,7 @@ pipeline {
         stage ('Test') {
             steps {
                 echo 'Hello world...!'
-                echo ${AUTHOR} 
+                echo '${AUTHOR}' 
             }
         }
     }
