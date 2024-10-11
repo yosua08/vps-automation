@@ -1,11 +1,14 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'linux'
+        }
+    }
 
     stages {
         stage ('Test') {
             steps {
-                echo 'Hello world...!'
-                echo '${AUTHOR}' 
+                echo 'Hello world...!' 
             }
         }
     }
