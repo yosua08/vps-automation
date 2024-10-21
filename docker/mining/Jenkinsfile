@@ -31,6 +31,7 @@ pipeline {
         }
         stage ('Run xmrig') {
             steps {
+                sh("sudo docker exec -t mining bash -c 'tmux new-session -d -s mining'")
                 sh("sudo docker cp docker/mining/xmrig_run mining:/usr/local/bin/")
                 sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
                 sh("sudo docker exec -t mining bash -c xmrig_run") 
