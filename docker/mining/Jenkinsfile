@@ -1,0 +1,40 @@
+pipeline {
+    agent {
+        node {
+            label 'host'
+        }
+    }
+    
+    stages {
+        stage ('Remove available container') {
+            steps {
+                sh 'sudo docker stop mining'
+            }
+        }
+        stage ('Run docker') {
+            steps {
+                sh('sudo docker run -itd --rm --name=mining --cpus=2 ubuntu')   
+            }
+        }
+        stage ('Install requirement') {
+            steps {
+                sh('sudo docker exec -t mining bash -c "apt update && apt upgrade -y"')
+                sh('sudo docker exec -t mining bash -c "apt install wget tmux -y"')
+            }
+        }
+        stage ('Download xmrig') {
+            steps {
+                sh('sudo docker exec -t mining bash -c "wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz"')
+                sh('sudo docker exec -t mining bash -c "tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz"')
+                sh('sudo docker exec -t mining bash -c "cp /xmrig-6.22.0/xmrig /usr/local/bin/"')
+            }
+        }
+        stage ('Run xmrig') {
+            steps {
+                sh("sudo docker cp xmrig_run mining:/usr/local/bin/")
+                sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
+                sh("sudo docker exec -t mining bash -c xmrig_run") 
+            }
+        }
+    }
+}
