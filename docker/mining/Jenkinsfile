@@ -6,7 +6,10 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'CHOICE', choices: ['Yes', 'No'], description: 'Pick something')
+        choice(name: 'Remove_Container', choices: ['Yes', 'No'], description: 'Pick something')
+        choice(name: 'Docker_Setup', choices: ['Yes', 'No'], description: 'Pick something')
+        choice(name: 'Run_Xmrig', choices: ['Yes', 'No'], description: 'Pick something')
+        choice(name: 'Stop_Xmrig', choices: ['Yes', 'No'], description: 'Pick something')
     }
 
     options{
@@ -17,68 +20,52 @@ pipeline {
         stage ('Remove available container') {
             steps {
                 script {
-                    if (params.name == "Yes") {
+                    if (params.Remove_Container == "Yes") {
                         sh("sudo docker stop mining")
-                        // stage ("Remove Container") {
-                        //     steps {
-                        //         sh("sudo docker stop mining")
-                        //     }
-                        // }
                     } else {
-                        echo("Container running. Go to next stage...!!")
-                        // stage ("Container running") {
-                        //     steps {
-                        //         echo("Container running. Go to next stage...!!")
-                        //     }
-                        // }
+                        echo("This stage skipped")
                     }
                 }
             }
-            // input {
-            //     message "Do you want to delete container?"
-            //     ok "Yes, delete now"
-            //     submitter "admin"
-            // }
         }
 
         stage ('Docker setup') {
-            input {
-                message "Run docker contaner?"
-                ok "Yes, run docker now"
-                submitter "admin"
-            }
             steps {
-                sh('sudo docker run -itd --rm --name=mining --cpus=2 ubuntu')   
-                sh('sudo docker exec -t mining bash -c "apt update && apt upgrade -y"')
-                sh('sudo docker exec -t mining bash -c "apt install wget tmux -y"')
-                sh('sudo docker exec -t mining bash -c "wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz"')
-                sh('sudo docker exec -t mining bash -c "tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz"')
-                sh('sudo docker exec -t mining bash -c "cp /xmrig-6.22.0/xmrig /usr/local/bin/"')
-                sh("sudo docker cp docker/mining/xmrig_run mining:/usr/local/bin/")
-                sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
+                script {
+                    if (params.Docker_Setup == "Yes") {
+                        sh('sudo docker run -itd --rm --name=mining --cpus=2 ubuntu')   
+                        sh('sudo docker exec -t mining bash -c "apt update && apt upgrade -y"')
+                        sh('sudo docker exec -t mining bash -c "apt install wget tmux -y"')
+                        sh('sudo docker exec -t mining bash -c "wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz"')
+                        sh('sudo docker exec -t mining bash -c "tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz"')
+                        sh('sudo docker exec -t mining bash -c "cp /xmrig-6.22.0/xmrig /usr/local/bin/"')
+                        sh("sudo docker cp docker/mining/xmrig_run mining:/usr/local/bin/")
+                        sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
+                    } else {
+                        echo("This stage skipped")
+                    }
+                }
             }
         }
 
         stage ('Run xmrig') {
-            input {
-                message "Run xmrig?"
-                ok "Yes, run xmrig now"
-                submitter "admin"
-            }
             steps {
-                sh("sudo docker exec -t mining bash -c 'tmux new-session -d -s mining'")
-                sh("sudo docker exec -t mining bash -c xmrig_run") 
+                if (params.Run_Xmrig == "Yes") {
+                    sh("sudo docker exec -t mining bash -c 'tmux new-session -d -s mining'")
+                    sh("sudo docker exec -t mining bash -c xmrig_run")
+                } else {
+                    echo("This stage skipped")
+                }
             }
         }
 
         stage ('Stop xmrig') {
-            input {
-                message "Do you want to stop xmrig?"
-                ok "Yes, stop now"
-                submitter "admin"
-            }
             steps {
-                sh("sudo docker exec -t mining bash -c 'tmux kill-session -t mining'")
+                if (params.Stop_Xmrig == "Yes") {
+                    sh("sudo docker exec -t mining bash -c 'tmux kill-session -t mining'")
+                } else {
+                    echo("This stage skipped")
+                }
             }
         }
     }
