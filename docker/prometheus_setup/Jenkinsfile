@@ -28,7 +28,7 @@ pipeline {
                 sh("sudo mv prometheus-2.53.2.linux-amd64/console_libraries /etc/prometheus")
                 sh("sudo mv prometheus-2.53.2.linux-amd64/consoles /etc/prometheus")
                 sh("sudo mv prometheus-2.53.2.linux-amd64/prometheus.yml /etc/prometheus")
-                sh("sudo cp prometheus.service /etc/systemd/system/")
+                sh("sudo cp docker/prometheus_setup/prometheus.service /etc/systemd/system/")
                 sh("sudo systemctl daemon-reload")
             }
         }
