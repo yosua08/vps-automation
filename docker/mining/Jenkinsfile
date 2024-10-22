@@ -50,21 +50,25 @@ pipeline {
 
         stage ('Run xmrig') {
             steps {
-                if (params.Run_Xmrig == "Yes") {
-                    sh("sudo docker exec -t mining bash -c 'tmux new-session -d -s mining'")
-                    sh("sudo docker exec -t mining bash -c xmrig_run")
-                } else {
-                    echo("This stage skipped")
+                script {
+                    if (params.Run_Xmrig == "Yes") {
+                        sh("sudo docker exec -t mining bash -c 'tmux new-session -d -s mining'")
+                        sh("sudo docker exec -t mining bash -c xmrig_run")
+                    } else {
+                        echo("This stage skipped")
+                    }
                 }
             }
         }
 
         stage ('Stop xmrig') {
             steps {
-                if (params.Stop_Xmrig == "Yes") {
-                    sh("sudo docker exec -t mining bash -c 'tmux kill-session -t mining'")
-                } else {
-                    echo("This stage skipped")
+                script {
+                    if (params.Stop_Xmrig == "Yes") {
+                        sh("sudo docker exec -t mining bash -c 'tmux kill-session -t mining'")
+                    } else {
+                        echo("This stage skipped")
+                    }
                 }
             }
         }
