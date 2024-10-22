@@ -24,7 +24,7 @@ pipeline {
                 sh("sudo mv prometheus-2.53.2.linux-amd64/promtool /usr/local/bin")
                 sh("sudo mkdir /etc/prometheus")
                 sh("sudo mkdir /var/lib/prometheus")
-                sh("sudo chown -R /var/lib/prometheus")
+                sh("sudo chown -R prometheus:prometheus /var/lib/prometheus")
                 sh("sudo mv prometheus-2.53.2.linux-amd64/console_libraries /etc/prometheus")
                 sh("sudo mv prometheus-2.53.2.linux-amd64/consoles /etc/prometheus")
                 sh("sudo mv prometheus-2.53.2.linux-amd64/prometheus.yml /etc/prometheus")
