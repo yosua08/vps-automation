@@ -5,17 +5,26 @@ pipeline {
         }
     }
 
+    parameters {
+        choice(name: 'CHOICE', choices: ['Yes', 'No'], description: 'Pick something')
+    }
+
     options{
         disableConcurrentBuilds()
     }
     
     stages {
         stage ('Remove available container') {
-            input {
-                message "Do you want to delete container?"
-                ok "Yes, delete now"
-                submitter "admin"
+            when {
+                expression {
+                    prams.name == "Yes"
+                }
             }
+            // input {
+            //     message "Do you want to delete container?"
+            //     ok "Yes, delete now"
+            //     submitter "admin"
+            // }
             steps {
                 sh 'sudo docker stop mining'
             }
