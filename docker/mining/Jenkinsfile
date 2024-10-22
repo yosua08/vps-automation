@@ -18,17 +18,19 @@ pipeline {
             steps {
                 script {
                     if (params.name == "Yes") {
-                        stage ("Remove Container") {
-                            steps {
-                                sh("sudo docker stop mining")
-                            }
-                        }
+                        sh("sudo docker stop mining")
+                        // stage ("Remove Container") {
+                        //     steps {
+                        //         sh("sudo docker stop mining")
+                        //     }
+                        // }
                     } else {
-                        stage ("Container running") {
-                            steps {
-                                echo("Container running. Go to next stage...!!")
-                            }
-                        }
+                        echo("Container running. Go to next stage...!!")
+                        // stage ("Container running") {
+                        //     steps {
+                        //         echo("Container running. Go to next stage...!!")
+                        //     }
+                        // }
                     }
                 }
             }
