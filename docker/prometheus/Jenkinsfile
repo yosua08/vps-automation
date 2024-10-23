@@ -1,0 +1,56 @@
+pipeline {
+    agent {
+        node {
+            label "host"
+        }
+    }
+
+    parameters {
+        choice(name: "Add_user", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Setup_prometheus", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Prometheus", choices: ["Start", "Stop"], description: "Pick something")
+    }
+
+    stages {
+        stage ("Create user & group") {
+            steps {
+                if (params.Add_user == "Yes") {
+                    sh("sudo groupadd --system prometheus")
+                    sh("sudo useradd --system -s /sbin/nologin -g prometheus prometheus")
+                } else {
+                    echo("Not run this stage")
+                }
+            }
+        }
+        stage ("Setup prometheus") {
+            steps {
+                if (params.Setup_prometheus == "Yes") {
+                    sh("sudo wget https://github.com/prometheus/prometheus/releases/download/v2.53.2/prometheus-2.53.2.linux-amd64.tar.gz")
+                    sh("sudo tar -zxvf prometheus-2.53.2.linux-amd64.tar.gz")
+                    sh("sudo mv prometheus-2.53.2.linux-amd64/prometheus /usr/local/bin")
+                    sh("sudo mv prometheus-2.53.2.linux-amd64/promtool /usr/local/bin")
+                    sh("sudo mkdir /etc/prometheus")
+                    sh("sudo mkdir /var/lib/prometheus")
+                    sh("sudo chown -R prometheus:prometheus /var/lib/prometheus")
+                    sh("sudo mv prometheus-2.53.2.linux-amd64/console_libraries /etc/prometheus")
+                    sh("sudo mv prometheus-2.53.2.linux-amd64/consoles /etc/prometheus")
+                    sh("sudo mv prometheus-2.53.2.linux-amd64/prometheus.yml /etc/prometheus")
+                    sh("sudo cp docker/prometheus_setup/prometheus.service /etc/systemd/system/")
+                    sh("sudo systemctl daemon-reload")
+                } else {
+                    echo("Not run this stage")
+                }
+            }
+        }
+        stage ("Prometheus") {
+            steps {
+                if (params.Prometheus == "Start") {
+                    sh("sudo systemctl start prometheus")
+                    sh("sudo systemctl enable --now prometheus")
+                } else if (params.Prometheus == "Stop") {
+                    sh("sudo systemctl stop prometheus")
+                }
+            }
+        }
+    }
+}
