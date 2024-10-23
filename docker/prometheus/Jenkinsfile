@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage ("Create user & group") {
             steps {
-                sctipt {
+                script {
                     if (params.Add_user == "Yes") {
                         sh("sudo groupadd --system prometheus")
                         sh("sudo useradd --system -s /sbin/nologin -g prometheus prometheus")
@@ -26,7 +26,7 @@ pipeline {
         }
         stage ("Setup prometheus") {
             steps {
-                sctipt {
+                script {
                     if (params.Setup_prometheus == "Yes") {
                         sh("sudo wget https://github.com/prometheus/prometheus/releases/download/v2.53.2/prometheus-2.53.2.linux-amd64.tar.gz")
                         sh("sudo tar -zxvf prometheus-2.53.2.linux-amd64.tar.gz")
@@ -48,7 +48,7 @@ pipeline {
         }
         stage ("Prometheus") {
             steps {
-                sctipt {
+                script {
                     if (params.Prometheus == "Start") {
                         sh("sudo systemctl start prometheus")
                         sh("sudo systemctl enable --now prometheus")
