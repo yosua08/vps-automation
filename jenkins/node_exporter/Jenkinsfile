@@ -35,7 +35,7 @@ pipeline {
                         sh("sudo mv node_exporter-1.8.2.linux-amd64/node_exporter /usr/local/bin")
                         // Create node_exporter daemon
                         sh("sudo mv jenkins/node_exporter/node-exporter.service /etc/systemd/system")
-                        sh("sudo systemctl daemon-restart")
+                        sh("sudo systemctl daemon-reload")
                     } else {
                         echo("Not run this stage")
                     }
