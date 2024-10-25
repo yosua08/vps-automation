@@ -1,0 +1,57 @@
+pipeline {
+    agent {
+        node {
+            label 'host'
+        }
+    }
+
+    parameters{
+        choice(name: "Setup_node_exporter", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Node_exporter", choices: ["Start", "Stop"], description: "Pick something")
+    }
+
+    stages {
+        stages {
+        stage ("Create user & group") {
+            steps {
+                script {
+                    if (params.Add_user == "Yes") {
+                        sh("sudo groupadd --system prometheus")
+                        sh("sudo useradd --system -s /sbin/nologin -g prometheus prometheus")
+                    } else {
+                        echo("Not run this stage")
+                    }
+                }
+            }
+        }
+        stage ("Setup_node-exporter") {
+            steps{
+                script {
+                    if (params.Setup_node_exporter == "Yes") {
+                        // Download package & extract
+                        sh("sudo wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz")
+                        sh("sudo tar -zxvf node_exporter-1.8.2.linux-amd64.tar.gz")
+                        sh("sudo mv jenkins/node_exporter/node_exporter-1.8.2.linux-amd64/node_exporter /usr/local/bin")
+                        // Create node_exporter daemon
+                        sh("sudo mv jenkins/node_exporter/node-exporter.service /etc/systemd/system")
+                        sh("sudo systemctl daemon-restart")
+                    } else {
+                        echo("Not run this stage")
+                    }
+                }
+            }
+        }
+        stage ("Node-exporter control") {
+            steps {
+                script {
+                    if (params.Node_exporter == "Start") {
+                        sh("sudo systemctl start node-exporter")
+                        sh("sudo systemctl --enable now node-exporter")
+                    } else if (params.Node_exporter == "Stop") {
+                        sh("sudo systemctl stop node-exporter")
+                    }
+                }    
+            }
+        }
+    }
+}
