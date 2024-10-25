@@ -48,7 +48,7 @@ pipeline {
                 script {
                     if (params.Node_exporter == "Start") {
                         sh("sudo systemctl start node-exporter")
-                        sh("sudo systemctl --enable now node-exporter")
+                        sh("sudo systemctl enable --now node-exporter")
                     } else if (params.Node_exporter == "Stop") {
                         sh("sudo systemctl stop node-exporter")
                     }
