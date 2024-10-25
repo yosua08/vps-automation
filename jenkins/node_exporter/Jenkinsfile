@@ -6,6 +6,7 @@ pipeline {
     }
 
     parameters{
+        choice(name: "Add_user", choices: ["Yes", "No"], description: "Pick something")
         choice(name: "Setup_node_exporter", choices: ["Yes", "No"], description: "Pick something")
         choice(name: "Node_exporter", choices: ["Start", "Stop"], description: "Pick something")
     }
