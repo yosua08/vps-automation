@@ -1,0 +1,111 @@
+pipeline {
+    agent {
+        node {
+            label 'host'
+        }
+    }
+
+    parameters{
+        choice(name: "Docker_network", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Mysql_setup", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Zabbix_java_gateway", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Zabbix_server", choices: ["Yes", "No"], description: "Pick something")
+        choice(name: "Zabbix_web", choices: ["Yes", "No"], description: "Pick something")
+    }
+
+    stages {
+        stage('create docker network') {
+            steps {
+                script {
+                    if (params.Docker_network == 'Yes') {
+                        sh("docker network create monitoring")
+                    } elif (params.Docker_network == 'No') {
+                        echo("This stage skipped")
+                    }
+                }
+            }
+        }
+
+        stage('mysql configure') {
+            environment {
+                MYSQLCRED = credentials('zabbix-mysql')
+            }
+            steps {
+                script {
+                    if (params.Mysql_setup == 'Yes') {
+                        sh 'sudo docker run --name zabbix-mysql -t \
+                            -e MYSQL_DATABASE="zabbix" \
+                            -e MYSQL_USER="zabbix" \
+                            -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
+                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" \
+                            --network=monitoring --restart unless-stopped \
+                            -d mysql:8.0-oracle --character-set-server=utf8 \
+                            --collation-server=utf8_bin \
+                            --default-authentication-plugin=mysql_native_password'
+                    } elif (params.Mysql_setup == 'No') {
+                        echo("This stage skipped")
+                    }
+                }    
+            }
+        }
+        stage('zabbix java gateway') {
+            steps {
+                script {
+                    if (params.Zabbix_java_gateway == 'Yes') {
+                        sh 'sudo docker run --name zabbix-java-gateway -t \ 
+                            --network=monitoring --restart unless-stopped \
+                            -d zabbix/zabbix-java-gateway:alpine-7.0-latest'
+                    } elif (params.Zabbix_java_gateway == 'No') {
+                        echo("This stage skipped")
+                    }
+                }
+            }
+        }
+        stage('zabbix server') {
+            environment {
+                MYSQLCRED = credentials('zabbix-mysql')
+            }
+            steps {
+                script {
+                    if (params.Zabbix_server == 'Yes') {
+                        sh 'sudo docker run --name zabbix-server -t \
+                            -e DB_SERVER_HOST="zabbix-mysql" \
+                            -e MYSQL_DATABASE="zabbix" \
+                            -e MYSQL_USER="zabbix" \
+                            -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
+                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" \
+                            -e ZBX_JAVAGATEWAY="zabbix-java-gateway" \
+                            --network=monitoring -p 10051:10051 \
+                            --restart unless-stopped \
+                            -d zabbix/zabbix-server-mysql:alpine-7.0-latest'
+                    } elif (params.Zabbix_server == 'No') {
+                        echo("This stage skipped")
+                    }    
+                }
+            }
+        }
+        stage('zabbix web') {
+            environment {
+                MYSQLCRED = credentials('zabbix-mysql')
+            }
+            steps { 
+                script {
+                    if (params.Zabbix_web == 'Yes') {
+                        sh 'sudo docker run --name zabbix-web-nginx -t \
+                            -e ZBX_SERVER_HOST="zabbix-server" \
+                            -e DB_SERVER_HOST="zabbix-mysql" \
+                            -e MYSQL_DATABASE="zabbix" \
+                            -e MYSQL_USER="zabbix" \
+                            -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
+                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" 
+                            --network=monitoring -p 8000:8080 \
+                            --restart unless-stopped \
+                            -d zabbix/zabbix-web-nginx-mysql:alpine-7.0-latest'
+                    } elif (params.Web == 'No') {
+                        echo("This stage skipped")
+                    }
+                }
+            }
+        }
+    }
+}
