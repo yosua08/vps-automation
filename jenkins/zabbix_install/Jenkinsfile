@@ -96,8 +96,7 @@ pipeline {
                             -e MYSQL_DATABASE="zabbix" \
                             -e MYSQL_USER="zabbix" \
                             -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
-                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" \ 
-                            --network=monitoring -p 8000:8080 \
+                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" --network=monitoring -p 8000:8080 \
                             --restart unless-stopped \
                             -d zabbix/zabbix-web-nginx-mysql:alpine-7.0-latest'
                     } else {
