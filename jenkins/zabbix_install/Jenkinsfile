@@ -46,8 +46,7 @@ pipeline {
             steps {
                 script {
                     if (params.Zabbix_java_gateway == 'Yes') {
-                        sh("sudo docker run --name=zabbix-java-gateway -t --network=monitoring --restart unless-stopped \
-                            -d zabbix/zabbix-java-gateway:alpine-7.0-latest")
+                        zabbix.zabbix_java_gateway()
                     } else {
                         echo("This stage skipped")
                     }
@@ -61,16 +60,7 @@ pipeline {
             steps {
                 script {
                     if (params.Zabbix_server == 'Yes') {
-                        sh 'sudo docker run --name zabbix-server -t \
-                            -e DB_SERVER_HOST="zabbix-mysql" \
-                            -e MYSQL_DATABASE="zabbix" \
-                            -e MYSQL_USER="zabbix" \
-                            -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
-                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" \
-                            -e ZBX_JAVAGATEWAY="zabbix-java-gateway" \
-                            --network=monitoring -p 10051:10051 \
-                            --restart unless-stopped \
-                            -d zabbix/zabbix-server-mysql:alpine-7.0-latest'
+                        zabbix.zabbix_server()
                     } else {
                         echo("This stage skipped")
                     }    
@@ -84,15 +74,7 @@ pipeline {
             steps { 
                 script {
                     if (params.Zabbix_web == 'Yes') {
-                        sh 'sudo docker run --name zabbix-web-nginx -t \
-                            -e ZBX_SERVER_HOST="zabbix-server" \
-                            -e DB_SERVER_HOST="zabbix-mysql" \
-                            -e MYSQL_DATABASE="zabbix" \
-                            -e MYSQL_USER="zabbix" \
-                            -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
-                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" --network=monitoring -p 8000:8080 \
-                            --restart unless-stopped \
-                            -d zabbix/zabbix-web-nginx-mysql:alpine-7.0-latest'
+                        zabbix.zabbix_web()
                     } else {
                         echo("This stage skipped")
                     }
