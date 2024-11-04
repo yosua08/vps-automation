@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     if (params.Docker_network == 'Yes') {
-                        sh("docker network create monitoring")
+                        sh("sudo docker network create monitoring")
                     } else {
                         echo("This stage skipped")
                     }
