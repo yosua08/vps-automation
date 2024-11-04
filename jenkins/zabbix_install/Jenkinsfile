@@ -52,9 +52,8 @@ pipeline {
             steps {
                 script {
                     if (params.Zabbix_java_gateway == 'Yes') {
-                        sh 'sudo docker run --name zabbix-java-gateway -t \ 
-                            --network=monitoring --restart unless-stopped \
-                            -d zabbix/zabbix-java-gateway:alpine-7.0-latest'
+                        sh("sudo docker run --name=zabbix-java-gateway -t --network=monitoring --restart unless-stopped \
+                            -d zabbix/zabbix-java-gateway:alpine-7.0-latest")
                     } else {
                         echo("This stage skipped")
                     }
