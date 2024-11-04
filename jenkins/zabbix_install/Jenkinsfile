@@ -1,3 +1,5 @@
+@Library("vps-automation@main")_
+
 pipeline {
     agent {
         node {
@@ -33,15 +35,7 @@ pipeline {
             steps {
                 script {
                     if (params.Mysql_setup == 'Yes') {
-                        sh 'sudo docker run --name zabbix-mysql -t \
-                            -e MYSQL_DATABASE="zabbix" \
-                            -e MYSQL_USER="zabbix" \
-                            -e MYSQL_PASSWORD="$MYSQLCRED_PSW" \
-                            -e MYSQL_ROOT_PASSWORD="$MYSQLCRED_PSW" \
-                            --network=monitoring --restart unless-stopped \
-                            -d mysql:8.0-oracle --character-set-server=utf8 \
-                            --collation-server=utf8_bin \
-                            --default-authentication-plugin=mysql_native_password'
+                        zabbix.mysql_setup()
                     } else {
                         echo("This stage skipped")
                     }
