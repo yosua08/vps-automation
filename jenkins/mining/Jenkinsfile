@@ -39,8 +39,8 @@ pipeline {
                         // sh('sudo docker exec -t mining bash -c "wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz"')
                         // sh('sudo docker exec -t mining bash -c "tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz"')
                         // sh('sudo docker exec -t mining bash -c "cp /xmrig-6.22.0/xmrig /usr/local/bin/"')
-                        // sh("sudo docker cp jenkins/mining/xmrig_run mining:/usr/local/bin/")
-                        // sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
+                        sh("sudo docker cp jenkins/mining/xmrig_run mining:/usr/local/bin/")
+                        sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
                         sh('sudo docker-compose up -d')
                     } else {
                         echo("This stage skipped")
