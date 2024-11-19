@@ -2,7 +2,7 @@ services:
   mining:
     image: ubuntu
     container_name: mining
-    stdin: true
+    stdin_open: true
     tty: true
     cpus: "2"
     restart: "no"
