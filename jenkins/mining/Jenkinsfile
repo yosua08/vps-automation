@@ -34,14 +34,14 @@ pipeline {
                 script {
                     if (params.Docker_Setup == "Yes") {
                         // sh('sudo docker run -itd --rm --name=mining --cpus=2 ubuntu')   
-                        // sh('sudo docker exec -t mining bash -c "apt update && apt upgrade -y"')
-                        // sh('sudo docker exec -t mining bash -c "apt install wget tmux -y"')
-                        // sh('sudo docker exec -t mining bash -c "wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz"')
-                        // sh('sudo docker exec -t mining bash -c "tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz"')
-                        // sh('sudo docker exec -t mining bash -c "cp /xmrig-6.22.0/xmrig /usr/local/bin/"')
-                        // sh("sudo docker cp jenkins/mining/xmrig_run mining:/usr/local/bin/")
-                        // sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
                         sh('sudo docker-compose -f ./jenkins/mining/docker-compose.yaml up -d')
+                        sh('sudo docker exec -t mining bash -c "apt update && apt upgrade -y"')
+                        sh('sudo docker exec -t mining bash -c "apt install wget tmux -y"')
+                        sh('sudo docker exec -t mining bash -c "wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz"')
+                        sh('sudo docker exec -t mining bash -c "tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz"')
+                        sh('sudo docker exec -t mining bash -c "cp /xmrig-6.22.0/xmrig /usr/local/bin/"')
+                        sh("sudo docker cp jenkins/mining/xmrig_run mining:/usr/local/bin/")
+                        sh("sudo docker exec -t mining bash -c 'chmod +x /usr/local/bin/xmrig_run'")
                     } else {
                         echo("This stage skipped")
                     }
