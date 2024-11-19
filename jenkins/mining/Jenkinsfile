@@ -33,7 +33,6 @@ pipeline {
             steps {
                 script {
                     if (params.Docker_Setup == "Yes") {
-                        // sh('sudo docker run -itd --rm --name=mining --cpus=2 ubuntu')   
                         sh('sudo docker-compose -f ./jenkins/mining/docker-compose.yaml up -d')
                         sh('sudo docker exec -t mining bash -c "apt update && apt upgrade -y"')
                         sh('sudo docker exec -t mining bash -c "apt install wget tmux -y"')

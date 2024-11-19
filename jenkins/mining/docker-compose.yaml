@@ -6,13 +6,3 @@ services:
     tty: true
     cpus: "2"
     restart: "no"
-    # command: >
-    #   bash -c "
-    #   apt update && 
-    #   apt upgrade -y && 
-    #   apt install wget tmux -y &&
-    #   wget https://github.com/xmrig/xmrig/releases/download/v6.22.0/xmrig-6.22.0-jammy-x64.tar.gz &&
-    #   tar -zxvf xmrig-6.22.0-jammy-x64.tar.gz &&
-    #   cp /xmrig-6.22.0/xmrig /usr/local/bin/ &&
-    #   chmod +x /usr/local/bin/xmrig_run &&
-    #   tail -f /dev/null"
