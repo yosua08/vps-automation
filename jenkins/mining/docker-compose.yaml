@@ -6,8 +6,6 @@ services:
     tty: true
     cpus: "2"
     restart: "no"
-    volumes:
-      - ./jenkins/mining/xmrig_run:/usr/local/bin/xmrig_run
     # command: >
     #   bash -c "
     #   apt update && 
