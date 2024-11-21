@@ -11,7 +11,8 @@ services:
     image: grafana/grafana-oss
     container_name: grafana
     restart: unless-stopped
-    ports: 3000:3000
+    ports: 
+      - "3000:3000"
     networks: 
       monitoring_network:
         ipv4_address: "192.168.10.2"
@@ -19,7 +20,8 @@ services:
   loki:
     image: grafana/loki
     container_name: loki
-    ports: "3100:3100"
+    ports: 
+      - "3100:3100"
     command: -config.file=docker/monitoring/loki/loki-config.yaml
     networks:
       monitoring_network:
