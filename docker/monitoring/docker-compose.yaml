@@ -20,9 +20,12 @@ services:
   loki:
     image: grafana/loki
     container_name: loki
+    restart: unless-stopped
     ports: 
       - "3100:3100"
-    command: -config.file=./docker/monitoring/loki/loki-config.yaml
+    volumes:
+      - ./docker/monitoring/loki:/etc/loki
+    command: -config.file=/etc/loki/loki-config.yaml
     networks:
       monitoring_network:
         ipv4_address: "172.10.0.10"
@@ -30,9 +33,11 @@ services:
   promtail:
     image: grafana/promtail
     container_name: promtail
+    restart: unless-stopped
     volumes:
+      - ./docker/monitoring/promtail:/etc/promtail
       - /var/log:/var/log
-    command: -config.file=./docker/monitoring/promtail/promtail-config.yaml
+    command: -config.file=/etc/promtail/promtail-config.yaml
     networks:
       monitoring_network:
         ipv4_address: "172.10.0.11"
