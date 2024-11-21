@@ -1,0 +1,35 @@
+networks:
+  monitoring_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "192.168.10.0/24"
+          gateway: "192.168.10.1"
+
+services:
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    restart: unless-stopped
+    ports: 3000:3000
+    networks: 
+      monitoring_network:
+        ipv4_address: "192.168.10.2"
+
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports: "3100:3100"
+    command: -config.file=docker/monitoring/loki/loki-config.yaml
+    networks:
+      monitoring_network:
+        ipv4_address: "192.168.10.10"
+
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=docker/monitoring/promtail/promtail-config.yaml
+    networks:
+      monitoring-network:
+        ipv4_address: "192.168.10.11"
