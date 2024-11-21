@@ -22,7 +22,7 @@ services:
     container_name: loki
     ports: 
       - "3100:3100"
-    command: -config.file=docker/monitoring/loki/loki-config.yaml
+    command: -config.file=./docker/monitoring/loki/loki-config.yaml
     networks:
       monitoring_network:
         ipv4_address: "172.10.0.10"
@@ -32,7 +32,7 @@ services:
     container_name: promtail
     volumes:
       - /var/log:/var/log
-    command: -config.file=docker/monitoring/promtail/promtail-config.yaml
+    command: -config.file=./docker/monitoring/promtail/promtail-config.yaml
     networks:
       monitoring_network:
         ipv4_address: "172.10.0.11"
