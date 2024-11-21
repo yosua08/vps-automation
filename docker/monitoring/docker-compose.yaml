@@ -27,6 +27,7 @@ services:
 
   promtail:
     image: grafana/promtail
+    container_name: promtail
     volumes:
       - /var/log:/var/log
     command: -config.file=docker/monitoring/promtail/promtail-config.yaml
