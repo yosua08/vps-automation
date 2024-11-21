@@ -1,0 +1,15 @@
+pipeline {
+    agent {
+        node {
+            label 'host'
+        }
+    }
+
+    stages {
+        stage ("Run Docker Compose") {
+            steps {
+                sh("sudo docker-compose -f ./docker/monitoring/docker-compose.yaml up -d")
+            }
+        }
+    }
+}
